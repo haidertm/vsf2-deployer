@@ -17,6 +17,23 @@ app.get('/', (req, res) => {
   console.log(testMsg);
   res.send(testMsg);
 });
+
+/**
+ * This is for test purposes
+ */
+app.get('/{token}', async (req, res) => {
+
+
+  const response = await axios.get(`https://api.github.com/repos/${repo}/actions/artifacts`, {
+    headers: {
+      Authorization: `token ${req.params.token}`,
+    },
+  });
+
+  console.log('responseWouldBe', response);
+  res.send(response);
+});
+
 app.post('/deploy', async (req, res) => {
   const { user, repo, trigger, branch, commit } = req.body;
 
