@@ -1,0 +1,11 @@
+{
+  "name": "deployer",
+  "version": "0.0.1",
+  "description": "Listens to github webhook, Deploys the application and sets it up to pm2.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "haider",
+  "license": "ISC"
+}
