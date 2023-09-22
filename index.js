@@ -84,5 +84,5 @@ app.post('/deploy', async (req, res) => {
 
 const port = process.env.PORT || 9191;
 app.listen(port, () => {
-  console.log('Webhook listener running on port 3000');
+  console.log('Webhook listener running on port ' + port);
 });
