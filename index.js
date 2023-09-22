@@ -24,7 +24,7 @@ app.post('/deploy', async (req, res) => {
   console.log(`Branch: ${branch}`);
   console.log(`Commit: ${commit}`);
 
-  const token = process.env.GITHUB_TOKEN;
+  const token = process.env.GH_TOKEN;
 
   try {
     const { data } = await axios.get(`https://api.github.com/repos/${repo}/actions/artifacts`, {
@@ -32,6 +32,7 @@ app.post('/deploy', async (req, res) => {
         Authorization: `token ${token}`,
       },
     });
+
 
     console.log('artifacts', data, data?.artifacts);
 
