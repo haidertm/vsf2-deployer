@@ -27,7 +27,8 @@ app.post('/deploy', (req, res) => {
     console.error(`stderr: ${stderr}`);
   });
 
-  res.status(200).send('Received');
+  // res.status(200).send('Received');
+  res.status(200).send(req.body);
 });
 
 const port = process.env.PORT || 9191;
