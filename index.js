@@ -1,7 +1,13 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const { exec } = require('child_process');
-require('dotenv').config();
+import express from 'express';
+import bodyParser from 'body-parser';
+import { exec } from 'child_process';
+import axios from 'axios';
+import fs from 'fs';
+import path from 'path';
+import dotenv from 'dotenv';
+
+dotenv.config();
+// require('dotenv').config();
 
 const app = express();
 app.use(bodyParser.json());
@@ -12,11 +18,14 @@ app.get('/', (req, res) => {
   res.send(testMsg);
 });
 app.post('/deploy', (req, res) => {
-  const { trigger, branch, commit } = req.body;
+  const { user, repo, trigger, branch, commit } = req.body;
 
   console.log(`Trigger: ${trigger}`);
   console.log(`Branch: ${branch}`);
   console.log(`Commit: ${commit}`);
+
+  const token = process.env.GITHUB_TOKEN;
+  const githubRepo = 'tilemountainuk/vsf2-nuxt3'; // Replace with your GitHub username and repo name
 
   exec('./deploy.sh', (error, stdout, stderr) => {
     if (error) {
