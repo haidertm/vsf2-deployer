@@ -5,6 +5,11 @@ const { exec } = require('child_process');
 const app = express();
 app.use(bodyParser.json());
 
+app.get('/deployer', (req, res) => {
+  const testMsg = `its a deployer test`;
+  console.log(testMsg);
+  res.send(testMsg);
+});
 app.post('/deploy', (req, res) => {
   const { trigger, branch, commit } = req.body;
 
