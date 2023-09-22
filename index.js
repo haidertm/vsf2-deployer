@@ -64,6 +64,7 @@ app.post('/deploy', async (req, res) => {
   } catch (error) {
     console.error(`Failed to download artifact: ${error}`);
     res.status(500).send(error);
+    return;
   }
 
   // const githubRepo = 'tilemountainuk/vsf2-nuxt3'; // Replace with your GitHub username and repo name
