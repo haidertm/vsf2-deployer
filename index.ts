@@ -6,8 +6,8 @@ require('dotenv').config();
 const app = express();
 app.use(bodyParser.json());
 
-app.get('/deployer', (req, res) => {
-  const testMsg = `its a deployer test`;
+app.get('/', (req, res) => {
+  const testMsg = `Deployer is Active`;
   console.log(testMsg);
   res.send(testMsg);
 });
