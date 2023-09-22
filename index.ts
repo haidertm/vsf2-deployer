@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { exec } = require('child_process');
+require('dotenv').config();
 
 const app = express();
 app.use(bodyParser.json());
@@ -29,6 +30,7 @@ app.post('/deploy', (req, res) => {
   res.status(200).send('Received');
 });
 
-app.listen(3000, () => {
+const port = process.env.PORT || 9191;
+app.listen(port, () => {
   console.log('Webhook listener running on port 3000');
 });
