@@ -6,6 +6,8 @@ const getArtifacts = async ({ token, repo }) => {
     Authorization: `token ${token}`
   };
 
+  const TIMEOUT = 15000; // 10 seconds
+
   try {
     console.log('------------------------');
     console.log('Fetching Artifacts List');
