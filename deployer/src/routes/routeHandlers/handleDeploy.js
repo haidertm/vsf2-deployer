@@ -1,15 +1,19 @@
-import path from 'path';
-import { config } from '../../config/index.js';
-import { ensureDirectory } from '../../helpers/fileHelper.js';
-import { randomString } from '../../helpers/base64.js';
+import deployerAction from '../../services/deployer.js';
+import { config } from '../../config/index.js'
 
-export default (req, res) => {
+export default async (req, res) => {
 
-  const releaseDir = path.join(config.releasesDir, randomString());  // Adjust path as needed
-  console.log('releasesDirectoryPathIs', releaseDir);
-  ensureDirectory(releaseDir);
+  const { user, repo, trigger, branch, commit, token } = req.body;
 
-  const testMsg = `releasesDirectoryPathIs::<br />${ releaseDir }`;
-  // console.log(testMsg);
-  res.send(testMsg);
+  console.log(`Trigger: ${ trigger }`);
+  console.log(`repo: ${ repo }`);
+  console.log(`Branch: ${ branch }`);
+  console.log(`Commit: ${ commit }`);
+
+  const result = await deployerAction({ token, commitHash: commit });
+  if (result.status && result.message) {
+    res.status(result.status).send(result.message);
+  } else {
+    res.send(result);
+  }
 };
