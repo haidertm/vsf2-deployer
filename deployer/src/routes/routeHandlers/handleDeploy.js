@@ -25,22 +25,22 @@ const deployFunction = async ({ user, repo, trigger, branch, commit, token }) =>
         await runShellCommand('yarn install', serverDir);
 
         // Read the ecosystem.config.js file
-        const ecosystemConfig = require('../../../../ecosystem.config.js');  // Replace with the actual path to your ecosystem.config.js
+        // const ecosystemConfig = require('../../../../ecosystem.config.js');  // Replace with the actual path to your ecosystem.config.js
 
         // Extract the app names
-        const appNames = ecosystemConfig.apps.map(app => app.name).join(',');
+        // const appNames = ecosystemConfig.apps.map(app => app.name).join(',');
 
-        // Run PM2 commands using Promise.all
-        Promise.all([
-          runShellCommand(`pm2 startOrRestart ecosystem.config.js --only "${appNames}"`)
-        ]).then(results => {
-          console.log('All PM2 commands executed successfully:', results);
-        }).catch(err => {
-          console.log('An error occurred:', err);
-        });
+        // // Run PM2 commands using Promise.all
+        // Promise.all([
+        //   runShellCommand(`pm2 startOrRestart ecosystem.config.js --only "${appNames}"`)
+        // ]).then(results => {
+        //   console.log('All PM2 commands executed successfully:', results);
+        // }).catch(err => {
+        //   console.log('An error occurred:', err);
+        // });
 
         // Run pm2 restart or pm2 command of your choice
-        // await runShellCommand('pm2 startOrRestart ecosystem.config.js --only "magento-api-server,tiles247-web"', parentDir);
+        await runShellCommand('pm2 startOrRestart ecosystem.config.js', parentDir);
       } catch (err) {
         logError('some error occurred');
       }
