@@ -106,3 +106,17 @@ export const deleteOldestRelease = async (releasesDir) => {
   }
 };
 
+export const runShellCommand = (command, cwd) => {
+  return new Promise((resolve, reject) => {
+    exec(command, { cwd }, (error, stdout, stderr) => {
+      if (error) {
+        console.warn(error);
+        reject(error);
+      }
+      console.log(stdout);
+      console.log(stderr);
+      resolve(stdout ? stdout : stderr);
+    });
+  });
+};
+

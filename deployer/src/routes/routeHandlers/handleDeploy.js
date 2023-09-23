@@ -1,5 +1,8 @@
 import deployerAction from '../../services/deployer.js';
 import { config } from '../../config/index.js'
+import { deleteOldestRelease, runShellCommand } from '../../helpers/fileHelper.js';
+import path from 'path';
+
 
 const deployFunction = async ({ user, repo, trigger, branch, commit, token }) => {
 
@@ -7,6 +10,24 @@ const deployFunction = async ({ user, repo, trigger, branch, commit, token }) =>
   try {
     const result = await deployerAction({ token, commitHash: commit });
     if (result?.status === 200 && result.message) {
+
+      try {
+        const activeReleaseDirectory = config.liveDirectory;
+
+        // Create the full path for the server sub-directory
+        const serverDir = path.join(activeReleaseDirectory, 'server');
+
+        // Create the parent directory for running pm2 commands
+        const parentDir = path.resolve(activeReleaseDirectory, '..');
+
+        // Run yarn install or yarn command of your choice
+        await runShellCommand('yarn install', serverDir);
+
+        // Run pm2 restart or pm2 command of your choice
+        await runShellCommand('pm2 restart all', parentDir);
+      } catch (err) {
+        console.log('some error occurred');
+      }
 
       // We now need to also execute the yarn and pm2 command to activate new version.
       console.log('Deployment has been completed Successfully!!!');
@@ -40,6 +61,10 @@ export default async (req, res) => {
   res.status(202).send(delayMessage);
 
   setTimeout(async () => {
+    // Deploy the latest release
     await deployFunction({ user, repo, trigger, branch, commit, token });
+
+    // Delete the oldest release if there are more than 3
+    await deleteOldestRelease(config.releasesDir);  // Adjust path as needed
   }, config.delayTheDeployment ?? 5000)
 };

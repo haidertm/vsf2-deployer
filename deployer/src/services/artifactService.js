@@ -1,6 +1,6 @@
 import axios from 'axios';
 import path from 'path';
-import { deleteOldestRelease, ensureDirectory, extractTarGz, updateSymlink, writeToFile } from '../helpers/fileHelper.js';
+import { ensureDirectory, extractTarGz, updateSymlink, writeToFile } from '../helpers/fileHelper.js';
 import AdmZip from 'adm-zip';
 import fs from 'fs';
 import { config } from '../config/index.js';
@@ -97,7 +97,6 @@ export const handleArtifacts = async ({ artifact, token, commitHash }) => {
   try {
     // Create a new directory under 'releases' for this commit hash
     const releaseDir = path.join(config.releasesDir, commitHash);  // Adjust path as needed
-    console.log('releasesDirectoryPathIs', releaseDir);
     ensureDirectory(releaseDir);
 
     // Extract to the apps directory under the current commit hash
@@ -131,8 +130,6 @@ export const handleArtifacts = async ({ artifact, token, commitHash }) => {
     // Update the 'live' symlink to point to the latest release
     updateSymlink(appsDir, config.liveDirectory);  // Adjust path as needed
 
-    // Delete the oldest release if there are more than 3
-    await deleteOldestRelease(config.releasesDir);  // Adjust path as needed
     const successMessage = `Artifact handled successfully.`;
     console.log(successMessage)
     return {
