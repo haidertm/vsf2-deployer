@@ -18,6 +18,7 @@ const getArtifacts = async ({ token, repo }) => {
 
     console.log('--------------------------');
     console.log('Artifacts List fetched successfully');
+    console.log(response?.data);
     console.log('--------------------------');
 
     return response;
