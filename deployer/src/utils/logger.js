@@ -37,7 +37,7 @@ function log(message, style = 'color: black', ...data) {
 }
 
 // If you want to use these functions elsewhere, you can export them like so:
-module.exports = {
+export {
   logError,
   logWarn,
   logInfo,
