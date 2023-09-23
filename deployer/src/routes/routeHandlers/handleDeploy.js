@@ -25,7 +25,7 @@ const deployFunction = async ({ user, repo, trigger, branch, commit, token }) =>
         await runShellCommand('yarn install', serverDir);
 
         // Run pm2 restart or pm2 command of your choice
-        await runShellCommand('pm2 startOrRestart ecosystem.config.js', parentDir);
+        await runShellCommand('pm2 startOrRestart ecosystem.config.js --only "magento-api-server,tiles247-web"', parentDir);
       } catch (err) {
         logError('some error occurred');
       }
