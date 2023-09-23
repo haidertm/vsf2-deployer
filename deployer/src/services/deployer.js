@@ -12,8 +12,6 @@ export default async ({ token, commitHash }) => {
     };
   }
 
-  console.log('Handling Deployment');
-
   const { status, data } = await githubApi.getArtifacts({ token, repo: config.repo });
 
   if (!data) {

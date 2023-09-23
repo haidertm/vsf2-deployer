@@ -7,8 +7,18 @@ const getArtifacts = async ({ token, repo }) => {
   };
 
   try {
-    console.log('Fetching ArtifactsList from url::', url);
-    return await axios.get(url, { headers });
+    console.log('------------------------');
+    console.log('Fetching Artifacts List');
+    console.log('URL:', url);
+    console.log('------------------------');
+
+    const response = await axios.get(url, { headers, timeout: TIMEOUT });
+
+    console.log('--------------------------');
+    console.log('Artifacts List fetched successfully');
+    console.log('--------------------------');
+
+    return response;
   } catch (err) {
     console.log('Fetching Artifacts Failed', err);
     return {
