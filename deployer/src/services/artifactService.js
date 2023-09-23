@@ -133,12 +133,12 @@ export const handleArtifacts = async ({ artifact, token, commitHash }) => {
 
     // Delete the oldest release if there are more than 3
     await deleteOldestRelease(config.releasesDir);  // Adjust path as needed
-
-
+    const successMessage = `Artifact handled successfully.`;
+    console.log(successMessage)
     return {
       error: false,
       status: 200,
-      message: 'Artifact handled successfully.'
+      message: successMessage
     };
 
   } catch (err) {

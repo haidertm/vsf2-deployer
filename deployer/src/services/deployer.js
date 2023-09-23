@@ -40,9 +40,6 @@ export default async ({ token, commitHash }) => {
 
   console.log('Handling Deployment');
 
-  // Sort artifacts by most recently updated
-  // const sortedArtifacts = artifacts.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
-  // const artifact = sortedArtifacts.find(artifact => artifact.name === config.artifactName); // Replace with your artifact name
   const artifact = artifacts.find(artifact => artifact?.workflow_run?.head_sha && artifact.workflow_run.head_sha === commitHash); // Replace with your artifact name
 
   if (!artifact) {
