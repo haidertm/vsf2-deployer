@@ -12,6 +12,8 @@ export default async ({ token, commitHash }) => {
     };
   }
 
+  console.log('Handling Deployment');
+
   const { status, data } = await githubApi.getArtifacts({ token, repo: config.repo });
 
   if (!data) {
@@ -32,6 +34,8 @@ export default async ({ token, commitHash }) => {
       message: 'No artifacts were found to deploy'
     };
   }
+
+  console.log('Handling Deployment');
 
   // Sort artifacts by most recently updated
   // const sortedArtifacts = artifacts.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));

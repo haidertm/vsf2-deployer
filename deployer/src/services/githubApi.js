@@ -5,7 +5,18 @@ const getArtifacts = async ({ token, repo }) => {
   const headers = {
     Authorization: `token ${token}`
   };
-  return axios.get(url, { headers });
+
+  try {
+    console.log('Fetching ArtifactsList from url::', url);
+    return await axios.get(url, { headers });
+  } catch (err) {
+    console.log('Fetching Artifacts Failed', err);
+    return {
+      error: true,
+      status: 500,
+      message: 'Something went wrong with Artifacts Download'
+    };
+  }
 };
 
 const deleteArtifact = async ({ token, repo, artifactId }) => {
