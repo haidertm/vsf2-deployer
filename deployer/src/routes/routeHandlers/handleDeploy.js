@@ -2,11 +2,12 @@ import deployerAction from '../../services/deployer.js';
 import { config } from '../../config/index.js'
 import { deleteOldestRelease, runShellCommand } from '../../helpers/fileHelper.js';
 import path from 'path';
+import { logError, logInfo } from '../../utils/logger.js';
 
 
 const deployFunction = async ({ user, repo, trigger, branch, commit, token }) => {
 
-  console.log(`TimeOut Completed, Deployment Started for commit ${ commit }`);
+  logInfo(`TimeOut Completed, Deployment Started for commit ${ commit }`);
   try {
     const result = await deployerAction({ token, commitHash: commit });
     if (result?.status === 200 && result.message) {
@@ -14,7 +15,7 @@ const deployFunction = async ({ user, repo, trigger, branch, commit, token }) =>
       try {
         const activeReleaseDirectory = config.liveDirectory;
 
-        // Create the full path for the server sub-directory
+        // Create the full path for the server subdirectory
         const serverDir = path.join(activeReleaseDirectory, 'server');
 
         // Create the parent directory for running pm2 commands
@@ -24,18 +25,21 @@ const deployFunction = async ({ user, repo, trigger, branch, commit, token }) =>
         await runShellCommand('yarn install', serverDir);
 
         // Run pm2 restart or pm2 command of your choice
-        await runShellCommand('pm2 restart all', parentDir);
+        await runShellCommand('pm2 startOrRestart ecosystem.config.js', parentDir);
       } catch (err) {
-        console.log('some error occurred');
+        logError('some error occurred');
       }
 
       // We now need to also execute the yarn and pm2 command to activate new version.
-      console.log('Deployment has been completed Successfully!!!');
+      logInfo('Deployment has been completed Successfully!!!');
+      return true; //Successful
     } else {
-      console.log(result)
+      logError(result)
+      return false;
     }
   } catch (err) {
-    console.log('caught an error', err);
+    logError('caught an error', err);
+    return false;
   }
 }
 
@@ -62,9 +66,11 @@ export default async (req, res) => {
 
   setTimeout(async () => {
     // Deploy the latest release
-    await deployFunction({ user, repo, trigger, branch, commit, token });
+    const deployResult = await deployFunction({ user, repo, trigger, branch, commit, token });
 
-    // Delete the oldest release if there are more than 3
-    await deleteOldestRelease(config.releasesDir);  // Adjust path as needed
+    if (deployResult) {
+      // Delete the oldest release if there are more than 3
+      await deleteOldestRelease(config.releasesDir);  // Adjust path as needed
+    }
   }, config.delayTheDeployment ?? 5000)
 };
