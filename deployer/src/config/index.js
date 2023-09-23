@@ -14,5 +14,5 @@ export const config = {
   releasesDir: path.join(__dirname, '..', '..', '..', process.env.RELEASES_DIR_NAME || 'releases'),
   liveDirectory: path.join(__dirname, '..', '..', '..', process.env.RELEASES_DIR_NAME || 'live'),
   gh_token: process.env.GH_TOKEN || null,
-  delayTheDeployment: 300000
+  delayTheDeployment: 100000
 };
