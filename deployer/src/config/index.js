@@ -3,6 +3,9 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+import dotenv from 'dotenv';
+dotenv.config();
+
 export const config = {
   port: process.env.PORT || 9191,
   repo: process.env.REPO || 'tilemountainuk/vsf2-nuxt3',
