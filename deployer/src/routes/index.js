@@ -3,6 +3,7 @@ import handleRoot from './routeHandlers/handleRoot.js';
 import handleToken from './routeHandlers/handleWebToken.js';
 import handleDeploy from './routeHandlers/handleDeploy.js';
 import deleteGithubArtifacts from './routeHandlers/deleteGithubArtifacts.js';
+import listGithubArtifacts from './routeHandlers/listGithubArtifacts.js';
 
 const router = express.Router();
 
@@ -16,6 +17,7 @@ router.get('/token/:token', handleToken);
 router.post('/deploy', handleDeploy);
 
 // Delete All Artifacts
-router.get('/delete/artifacts', deleteGithubArtifacts)
+router.get('/artifacts/delete', deleteGithubArtifacts)
+router.get('/artifacts/list/:token?', listGithubArtifacts)
 
 export default router;
