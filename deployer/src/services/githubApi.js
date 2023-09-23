@@ -13,7 +13,13 @@ const deleteArtifact = async ({ token, repo, artifactId }) => {
   const headers = {
     Authorization: `token ${token}`
   };
-  return axios.delete(url, { headers });
+
+  try {
+    const response = await axios.delete(url, { headers });
+    return { success: true, data: response.data };
+  } catch (err) {
+    return { success: false, error: err };
+  }
 };
 
 export default {

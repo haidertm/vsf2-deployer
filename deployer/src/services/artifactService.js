@@ -22,12 +22,30 @@ export const downloadArtifact = async ({ artifact, token, commitHash }) => {
     // Your Axios call for downloading the artifact
     const downloadUrl = artifact.archive_download_url;
 
-    const { data: fileData } = await axios.get(downloadUrl, {
+    let fileData;
+    await axios.get(downloadUrl, {
       headers: {
         Authorization: `token ${ token }`
       },
-      responseType: 'arraybuffer'
-    });
+      responseType: 'arraybuffer',
+      onDownloadProgress: (progressEvent) => {
+        if (progressEvent.total > 0) {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          console.log(`Download progress: ${percentCompleted}%`);
+        } else {
+          const downloadedMB = (progressEvent.loaded / (1024 * 1024)).toFixed(2);
+          console.log(`Downloaded: ${downloadedMB} MB`);
+        }
+      }
+    })
+      .then(({ data }) => fileData = data)
+      .catch((err) => {
+        return {
+          error: true,
+          status: 500,
+          message: 'Failed to download Artifact'
+        };
+      })
 
     // Ensure the 'artifacts' directory exists
     ensureDirectory(artifactsDirectory);
@@ -62,7 +80,11 @@ export const downloadArtifact = async ({ artifact, token, commitHash }) => {
 };
 export const handleArtifacts = async ({ artifact, token, commitHash }) => {
 
+  console.log('insideHandling Artifacts', artifact);
+
   const { status, message: downloadArtifactMessage } = await downloadArtifact({ artifact, token, commitHash })
+
+  console.log('downloadStatus', { status, message: downloadArtifactMessage })
 
   if (status !== 200) {
     return {
