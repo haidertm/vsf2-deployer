@@ -39,8 +39,14 @@ const deployFunction = async ({ user, repo, trigger, branch, commit, token }) =>
         //   console.log('An error occurred:', err);
         // });
 
-        // Run pm2 restart or pm2 command of your choice
-        await runShellCommand('pm2 startOrRestart ecosystem.config.js', parentDir);
+        // First, stop the apps specified in the ecosystem.config.js file
+        await runShellCommand('pm2 stop ecosystem.config.js', parentDir);
+
+        // Next, delete the stopped apps to clear them from PM2's list
+        await runShellCommand('pm2 delete ecosystem.config.js', parentDir);
+
+        // Finally, start the apps fresh
+        await runShellCommand('pm2 start ecosystem.config.js', parentDir);
       } catch (err) {
         logError('some error occurred');
       }
