@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { exec } from 'child_process';
 import * as rimraf from 'rimraf';
+import { logDebug } from '../utils/logger.js';
 
 export const ensureDirectory = (dirPath) => {
   try {
@@ -107,6 +108,8 @@ export const deleteOldestRelease = async (releasesDir) => {
 };
 
 export const runShellCommand = (command, cwd) => {
+  logDebug(`Running Shell command on ${ cwd }`)
+  logDebug(`Shell Command is ${ command }`)
   return new Promise((resolve, reject) => {
     exec(command, { cwd }, (error, stdout, stderr) => {
       if (error) {
